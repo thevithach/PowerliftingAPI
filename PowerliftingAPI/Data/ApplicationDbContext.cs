@@ -11,6 +11,12 @@ namespace PowerliftingAPI.Data
             : base(options)
         {
         }
+        
+        public DbSet<ApplicationUser> Users { get; set; }
+        public DbSet<Workouts> Workouts { get; set; }
+        public DbSet<Exercises> Exercises { get; set; }
+        public DbSet<WorkoutExercises> WorkoutExercises { get; set; }
+        public DbSet<ExerciseLog> ExerciseLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
