@@ -10,13 +10,15 @@ using Microsoft.OpenApi.Models;
 using PowerliftingAPI.Data;
 using PowerliftingAPI.Models;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
-
-
+// Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -44,7 +46,6 @@ builder.Services.AddAuthentication(u =>
         ValidateAudience = false
     };
 });
-
 
 builder.Services.AddCors();
 

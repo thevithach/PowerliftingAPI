@@ -15,6 +15,7 @@ public class ExercisesController : ControllerBase
     public ExercisesController(ApplicationDbContext context)
     {
        _context = context;
+       _response = new ApiResponse();
     }
 
     [HttpGet]
@@ -23,7 +24,6 @@ public class ExercisesController : ControllerBase
         _response.Result = await _context.Exercises.ToListAsync();
         _response.StatusCode = HttpStatusCode.OK;
         return Ok(_response);
-
     }
     
     

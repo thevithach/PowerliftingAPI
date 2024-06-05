@@ -289,6 +289,29 @@ namespace PowerliftingAPI.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Exercises");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Description for Exercise 1",
+                            IsCustom = false,
+                            Name = "Exercise 1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Description for Exercise 2",
+                            IsCustom = true,
+                            Name = "Exercise 2"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Description for Exercise 3",
+                            IsCustom = false,
+                            Name = "Exercise 3"
+                        });
                 });
 
             modelBuilder.Entity("PowerliftingAPI.Models.WorkoutExercises", b =>
