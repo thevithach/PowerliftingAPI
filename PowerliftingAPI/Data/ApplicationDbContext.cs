@@ -23,6 +23,13 @@ namespace PowerliftingAPI.Data
             base.OnModelCreating(builder);
 
             builder.Entity<IdentityUserLogin<string>>().HasKey(x => x.UserId);
+
+            // Seed data for Exercises
+            builder.Entity<Exercises>().HasData(
+                new Exercises { Id = 1, Name = "Exercise 1", Description = "Description for Exercise 1", IsCustom = false, UserId = null },
+                new Exercises { Id = 2, Name = "Exercise 2", Description = "Description for Exercise 2", IsCustom = true, UserId = null },
+                new Exercises { Id = 3, Name = "Exercise 3", Description = "Description for Exercise 3", IsCustom = false, UserId = null }
+            );
         }
     }
 }
