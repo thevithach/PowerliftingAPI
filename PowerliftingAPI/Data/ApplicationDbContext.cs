@@ -1,24 +1,22 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PowerliftingAPI.Models;
 
-namespace PowerliftingAPI.Data;
-
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+namespace PowerliftingAPI.Data
 {
-    public ApplicationDbContext(DbContextOptions options) : base(options)
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<IdentityUserLogin<string>>().HasKey(x => x.UserId);
+        }
     }
-
-    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        
-                
-    }
-
-
-
 }
