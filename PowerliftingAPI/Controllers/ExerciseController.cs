@@ -45,6 +45,31 @@ public class ExerciseController : ControllerBase
         return Ok(_response);
     }
 
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetExerciseById(int id)
+    {
+        if (id == 0)
+        {
+            _response.StatusCode = HttpStatusCode.NotFound;
+            _response.IsSuccess = false;
+            _response.ErrorsMessages = new List<string>() { "No exercise at this Id" };
+            return BadRequest(_response);
+        }
+
+        var exerciseFromDb = await _context.Exercises.Select(e => new{ e.Id, e.Name, e.Description}).FirstOrDefaultAsync(u => u.Id == id);
+        if (exerciseFromDb == null)
+        {
+            _response.StatusCode = HttpStatusCode.BadRequest;
+            _response.IsSuccess = false;
+            return BadRequest(_response);
+        }
+        _response.Result = exerciseFromDb;
+        _response.IsSuccess = true;
+        _response.StatusCode = HttpStatusCode.OK;
+        return Ok(_response);
+
+    }
+
     [HttpPost]
     public async Task<ActionResult<ApiResponse>> CreateExercise([FromBody] ExerciseCreateDTO exerciseCreateDto)
     {
