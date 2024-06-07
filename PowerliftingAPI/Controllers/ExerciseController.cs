@@ -69,4 +69,53 @@ public class ExerciseController : ControllerBase
         _response.IsSuccess = true;
         return Ok(_response);
     }
+    
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<ApiResponse>> UpdateExerciseById(int id, [FromBody] ExerciseUpdateDTO exerciseUpdateDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            _response.StatusCode = HttpStatusCode.BadRequest;
+            _response.IsSuccess = false;
+            _response.ErrorsMessages = new List<string>() { "Model is not valid" };
+        }
+
+        if (id == 0)
+        {
+            _response.StatusCode = HttpStatusCode.NotFound;
+            _response.IsSuccess = false;
+            _response.ErrorsMessages = new List<string>() { "No exercise at id 0" };
+        }
+
+        if (id != exerciseUpdateDto.Id)
+        {
+            _response.StatusCode = HttpStatusCode.BadRequest;
+            _response.IsSuccess = false;
+            return BadRequest();
+        }
+
+        var exerciseToBeUpdated = await _context.Exercises.FirstOrDefaultAsync(u => u.Id == id);
+
+        if (exerciseToBeUpdated == null)
+        {
+            _response.StatusCode = HttpStatusCode.BadRequest;
+            _response.IsSuccess = false;
+            return BadRequest();
+        }
+
+
+        exerciseToBeUpdated.Name = exerciseUpdateDto.Name;
+        exerciseToBeUpdated.Description = exerciseUpdateDto.Description;
+ 
+
+        _context.Exercises.Update(exerciseToBeUpdated);
+        await _context.SaveChangesAsync();
+
+        _response.IsSuccess = true;
+        _response.StatusCode = HttpStatusCode.OK;
+        _response.Result = exerciseUpdateDto;
+
+        return Ok(_response);
+
+    }
 }

@@ -20,7 +20,7 @@ public class CustomExercisesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllExercises()
+    public async Task<IActionResult> GetAllCustomExercises()
     {
         _response.Result = await _context.CustomExercises.ToListAsync();
         _response.StatusCode = HttpStatusCode.OK;
@@ -28,7 +28,7 @@ public class CustomExercisesController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetExerciseById(int id)
+    public async Task<IActionResult> GetCustomExerciseById(int id)
     {
         if (id == 0)
         {
@@ -53,7 +53,7 @@ public class CustomExercisesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ApiResponse>> CreateExercise([FromBody] CustomExerciseCreateDTO customExerciseCreateDto)
+    public async Task<ActionResult<ApiResponse>> CreateCustomExercise([FromBody] CustomExerciseCreateDTO customExerciseCreateDto)
     {
         if (!ModelState.IsValid)
         {
@@ -86,11 +86,11 @@ public class CustomExercisesController : ControllerBase
 
         _response.Result = customExerciseCreateDto;
         _response.StatusCode = HttpStatusCode.OK;
-        return CreatedAtAction(nameof(CreateExercise), new { id = exerciseToCreate.Id }, _response);
+        return CreatedAtAction(nameof(CreateCustomExercise), new { id = exerciseToCreate.Id }, _response);
     }
 
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<ApiResponse>> UpdateExerciseById(int id,
+    public async Task<ActionResult<ApiResponse>> UpdateCustomExerciseById(int id,
         [FromBody] CustomExerciseUpdateDTO customExerciseUpdateDto)
     {
         if (!ModelState.IsValid)
@@ -126,7 +126,7 @@ public class CustomExercisesController : ControllerBase
     }
 
     [HttpDelete]
-    public async Task<ActionResult<ApiResponse>> DeleteExerciseById(int id)
+    public async Task<ActionResult<ApiResponse>> DeleteCustomExerciseById(int id)
     {
         if (id == 0)
         {
