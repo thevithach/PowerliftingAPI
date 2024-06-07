@@ -7,15 +7,23 @@ public class WorkoutExercises
 {
     [Key]
     public int Id { get; set; }
-
-    [ForeignKey("Workout")]
+    [Required]
+    [ForeignKey("WorkoutId")]
     public int WorkoutId { get; set; }
     public virtual Workouts Workout { get; set; }
 
-    [ForeignKey("Exercise")]
-    public int ExerciseId { get; set; }
-    public virtual Exercises Exercise { get; set; }
+    [ForeignKey("ExerciseId")]
+    public int? ExerciseId { get; set; }
+    public virtual Exercises Exercises { get; set; }
+    [ForeignKey("CustomExerciseId")]
+    public int? CustomExerciseId { get; set; }
+    public CustomExercises CustomExercises { get; set; }
+    
+    [Required]
+    [Range(1, int.MaxValue)]
+    public int Repetitions { get; set; }
+    [Required]
+    public decimal Weight { get; set; }
 
-    public virtual ICollection<ExerciseLog> ExerciseLogs { get; set; }
 }
 

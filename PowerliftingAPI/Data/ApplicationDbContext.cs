@@ -15,8 +15,8 @@ namespace PowerliftingAPI.Data
         public DbSet<ApplicationUser> Users { get; set; }
         public DbSet<Workouts> Workouts { get; set; }
         public DbSet<Exercises> Exercises { get; set; }
+        public DbSet<CustomExercises> CustomExercises { get; set; }
         public DbSet<WorkoutExercises> WorkoutExercises { get; set; }
-        public DbSet<ExerciseLog> ExerciseLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -25,10 +25,10 @@ namespace PowerliftingAPI.Data
             builder.Entity<IdentityUserLogin<string>>().HasKey(x => x.UserId);
 
             // Seed data for Exercises
-            builder.Entity<Exercises>().HasData(
-                new Exercises { Id = 1, Name = "Exercise 1", Description = "Description for Exercise 1", IsCustom = false, UserId = null },
-                new Exercises { Id = 2, Name = "Exercise 2", Description = "Description for Exercise 2", IsCustom = true, UserId = null },
-                new Exercises { Id = 3, Name = "Exercise 3", Description = "Description for Exercise 3", IsCustom = false, UserId = null }
+            builder.Entity<CustomExercises>().HasData(
+                new CustomExercises { Id = 1, Name = "Exercise 1", Description = "Description for Exercise 1",  UserId = null },
+                new CustomExercises { Id = 2, Name = "Exercise 2", Description = "Description for Exercise 2", UserId = null },
+                new CustomExercises { Id = 3, Name = "Exercise 3", Description = "Description for Exercise 3",  UserId = null }
             );
         }
     }

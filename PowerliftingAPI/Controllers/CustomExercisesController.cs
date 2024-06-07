@@ -8,12 +8,12 @@ using PowerliftingAPI.Models;
 namespace PowerliftingAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class ExercisesController : ControllerBase
+public class CustomExercisesController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
     private ApiResponse _response;
     
-    public ExercisesController(ApplicationDbContext context)
+    public CustomExercisesController(ApplicationDbContext context)
     {
        _context = context;
        _response = new ApiResponse();
@@ -22,7 +22,7 @@ public class ExercisesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllExercises()
     {
-        _response.Result = await _context.Exercises.ToListAsync();
+        _response.Result = await _context.CustomExercises.ToListAsync();
         _response.StatusCode = HttpStatusCode.OK;
         return Ok(_response);
     }
@@ -37,7 +37,7 @@ public class ExercisesController : ControllerBase
             return BadRequest(_response);
         }
 
-        var exercise = await _context.Exercises.FirstOrDefaultAsync(u => u.Id == id);
+        var exercise = await _context.CustomExercises.FirstOrDefaultAsync(u => u.Id == id);
         if (exercise == null)
         {
             _response.StatusCode = HttpStatusCode.NotFound;
@@ -62,24 +62,26 @@ public class ExercisesController : ControllerBase
             return BadRequest(_response);
         }
 
-        Exercises exerciseToCreate = new Exercises()
+        CustomExercises exerciseToCreate = new CustomExercises()
         {
             Name = exerciseCreateDto.Name,
             Description = exerciseCreateDto.Description,
-            IsCustom = exerciseCreateDto.IsCustom,
             UserId = exerciseCreateDto.UserId,
         };
         
-        // Check if the user exists
-        var userExists = await _context.Users.AnyAsync(u => u.Id == exerciseToCreate.UserId);
-        if (!userExists)
+        // Check if the user exists only if UserId is not null
+        if (exerciseToCreate.UserId != null)
         {
-            _response.StatusCode = HttpStatusCode.BadRequest;
-            _response.ErrorsMessages = new List<string>() { "User does not exist" };
-            return BadRequest(_response);
+            var userExists = await _context.Users.AnyAsync(u => u.Id == exerciseToCreate.UserId);
+            if (!userExists)
+            {
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.ErrorsMessages = new List<string>() { "User does not exist" };
+                return BadRequest(_response);
+            }
         }
         
-        _context.Exercises.Add(exerciseToCreate);
+        _context.CustomExercises.Add(exerciseToCreate);
         await _context.SaveChangesAsync();
 
         _response.Result = exerciseCreateDto;
@@ -104,7 +106,7 @@ public class ExercisesController : ControllerBase
             return BadRequest();
         }
 
-        var exerciseToUpdate = await _context.Exercises.FirstOrDefaultAsync(u => u.Id == id);
+        var exerciseToUpdate = await _context.CustomExercises.FirstOrDefaultAsync(u => u.Id == id);
 
         if (exerciseToUpdate == null)
         {
@@ -115,10 +117,9 @@ public class ExercisesController : ControllerBase
 
         exerciseToUpdate.Name = exerciseUpdateDto.Name;
         exerciseToUpdate.Description = exerciseUpdateDto.Description;
-        exerciseToUpdate.IsCustom = exerciseUpdateDto.IsCustom;
         exerciseToUpdate.UserId = exerciseUpdateDto.UserId;
 
-        _context.Exercises.Update(exerciseToUpdate);
+        _context.CustomExercises.Update(exerciseToUpdate);
         await _context.SaveChangesAsync();
         _response.StatusCode = HttpStatusCode.NoContent;
         return Ok(_response);
@@ -135,7 +136,7 @@ public class ExercisesController : ControllerBase
             return BadRequest(_response);
         }
 
-        var exerciseDoesExist = await _context.Exercises.AnyAsync(u => u.Id == id);
+        var exerciseDoesExist = await _context.CustomExercises.AnyAsync(u => u.Id == id);
         if (!exerciseDoesExist)
         {
             _response.StatusCode = HttpStatusCode.NotFound;
@@ -144,7 +145,7 @@ public class ExercisesController : ControllerBase
             return NotFound(_response);
         }
         
-        var exerciseToBeDeleted = await _context.Exercises.FirstOrDefaultAsync(u => u.Id == id);
+        var exerciseToBeDeleted = await _context.CustomExercises.FirstOrDefaultAsync(u => u.Id == id);
         
         if (exerciseToBeDeleted == null)
         {
@@ -154,7 +155,7 @@ public class ExercisesController : ControllerBase
             return BadRequest();
         }
         
-        _context.Exercises.Remove(exerciseToBeDeleted);
+        _context.CustomExercises.Remove(exerciseToBeDeleted);
         await _context.SaveChangesAsync();
 
         _response.StatusCode = HttpStatusCode.NoContent;

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PowerliftingAPI.Data;
 
@@ -11,9 +12,11 @@ using PowerliftingAPI.Data;
 namespace PowerliftingAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240607105000_RecreatingExerciseModelToCustomExercises")]
+    partial class RecreatingExerciseModelToCustomExercises
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,7 +236,34 @@ namespace PowerliftingAPI.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("PowerliftingAPI.Models.CustomExercises", b =>
+            modelBuilder.Entity("PowerliftingAPI.Models.ExerciseLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Repetitions")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SetNumber")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("float");
+
+                    b.Property<int>("WorkoutExerciseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkoutExerciseId");
+
+                    b.ToTable("ExerciseLogs");
+                });
+
+            modelBuilder.Entity("PowerliftingAPI.Models.Exercises", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -245,6 +275,9 @@ namespace PowerliftingAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsCustom")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -265,43 +298,23 @@ namespace PowerliftingAPI.Migrations
                         {
                             Id = 1,
                             Description = "Description for Exercise 1",
+                            IsCustom = false,
                             Name = "Exercise 1"
                         },
                         new
                         {
                             Id = 2,
                             Description = "Description for Exercise 2",
+                            IsCustom = true,
                             Name = "Exercise 2"
                         },
                         new
                         {
                             Id = 3,
                             Description = "Description for Exercise 3",
+                            IsCustom = false,
                             Name = "Exercise 3"
                         });
-                });
-
-            modelBuilder.Entity("PowerliftingAPI.Models.Exercises", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Exercises");
                 });
 
             modelBuilder.Entity("PowerliftingAPI.Models.WorkoutExercises", b =>
@@ -312,32 +325,15 @@ namespace PowerliftingAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CustomExerciseId")
+                    b.Property<int>("ExerciseId")
                         .HasColumnType("int");
-
-                    b.Property<int>("CustomExercisesId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ExerciseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExercisesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Repetitions")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("WorkoutId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomExercisesId");
-
-                    b.HasIndex("ExercisesId");
+                    b.HasIndex("ExerciseId");
 
                     b.HasIndex("WorkoutId");
 
@@ -359,11 +355,6 @@ namespace PowerliftingAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -427,7 +418,18 @@ namespace PowerliftingAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PowerliftingAPI.Models.CustomExercises", b =>
+            modelBuilder.Entity("PowerliftingAPI.Models.ExerciseLog", b =>
+                {
+                    b.HasOne("PowerliftingAPI.Models.WorkoutExercises", "WorkoutExercise")
+                        .WithMany("ExerciseLogs")
+                        .HasForeignKey("WorkoutExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WorkoutExercise");
+                });
+
+            modelBuilder.Entity("PowerliftingAPI.Models.Exercises", b =>
                 {
                     b.HasOne("PowerliftingAPI.Models.ApplicationUser", "User")
                         .WithMany("CustomExercises")
@@ -438,15 +440,9 @@ namespace PowerliftingAPI.Migrations
 
             modelBuilder.Entity("PowerliftingAPI.Models.WorkoutExercises", b =>
                 {
-                    b.HasOne("PowerliftingAPI.Models.CustomExercises", "CustomExercises")
+                    b.HasOne("PowerliftingAPI.Models.Exercises", "Exercise")
                         .WithMany()
-                        .HasForeignKey("CustomExercisesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PowerliftingAPI.Models.Exercises", "Exercises")
-                        .WithMany("WorkoutExercises")
-                        .HasForeignKey("ExercisesId")
+                        .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -456,9 +452,7 @@ namespace PowerliftingAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CustomExercises");
-
-                    b.Navigation("Exercises");
+                    b.Navigation("Exercise");
 
                     b.Navigation("Workout");
                 });
@@ -481,9 +475,9 @@ namespace PowerliftingAPI.Migrations
                     b.Navigation("Workouts");
                 });
 
-            modelBuilder.Entity("PowerliftingAPI.Models.Exercises", b =>
+            modelBuilder.Entity("PowerliftingAPI.Models.WorkoutExercises", b =>
                 {
-                    b.Navigation("WorkoutExercises");
+                    b.Navigation("ExerciseLogs");
                 });
 
             modelBuilder.Entity("PowerliftingAPI.Models.Workouts", b =>

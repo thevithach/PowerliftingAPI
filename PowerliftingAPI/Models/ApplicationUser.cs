@@ -13,5 +13,5 @@ public class ApplicationUser : IdentityUser
     [ValidateNever]
     public virtual ICollection<Workouts> Workouts { get; set; }
     [ValidateNever]
-    public virtual ICollection<Exercises> CustomExercises { get; set; }
+    public virtual ICollection<CustomExercises> CustomExercises { get; set; }
 }
