@@ -53,7 +53,7 @@ public class CustomExercisesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ApiResponse>> CreateExercise([FromBody] ExerciseCreateDTO exerciseCreateDto)
+    public async Task<ActionResult<ApiResponse>> CreateExercise([FromBody] CustomExerciseCreateDTO customExerciseCreateDto)
     {
         if (!ModelState.IsValid)
         {
@@ -64,9 +64,9 @@ public class CustomExercisesController : ControllerBase
 
         CustomExercises exerciseToCreate = new CustomExercises()
         {
-            Name = exerciseCreateDto.Name,
-            Description = exerciseCreateDto.Description,
-            UserId = exerciseCreateDto.UserId,
+            Name = customExerciseCreateDto.Name,
+            Description = customExerciseCreateDto.Description,
+            UserId = customExerciseCreateDto.UserId,
         };
         
         // Check if the user exists only if UserId is not null
@@ -84,14 +84,14 @@ public class CustomExercisesController : ControllerBase
         _context.CustomExercises.Add(exerciseToCreate);
         await _context.SaveChangesAsync();
 
-        _response.Result = exerciseCreateDto;
+        _response.Result = customExerciseCreateDto;
         _response.StatusCode = HttpStatusCode.OK;
         return CreatedAtAction(nameof(CreateExercise), new { id = exerciseToCreate.Id }, _response);
     }
 
     [HttpPut("{id:int}")]
     public async Task<ActionResult<ApiResponse>> UpdateExerciseById(int id,
-        [FromBody] ExerciseUpdateDTO exerciseUpdateDto)
+        [FromBody] CustomExerciseUpdateDTO customExerciseUpdateDto)
     {
         if (!ModelState.IsValid)
         {
@@ -99,7 +99,7 @@ public class CustomExercisesController : ControllerBase
             _response.ErrorsMessages = new List<string>() { "Model is not valid" };
         }
 
-        if (exerciseUpdateDto == null || id != exerciseUpdateDto.Id)
+        if (customExerciseUpdateDto == null || id != customExerciseUpdateDto.Id)
         {
             _response.StatusCode = HttpStatusCode.BadRequest;
             _response.IsSuccess = false;
@@ -115,9 +115,9 @@ public class CustomExercisesController : ControllerBase
             return BadRequest();
         }
 
-        exerciseToUpdate.Name = exerciseUpdateDto.Name;
-        exerciseToUpdate.Description = exerciseUpdateDto.Description;
-        exerciseToUpdate.UserId = exerciseUpdateDto.UserId;
+        exerciseToUpdate.Name = customExerciseUpdateDto.Name;
+        exerciseToUpdate.Description = customExerciseUpdateDto.Description;
+        exerciseToUpdate.UserId = customExerciseUpdateDto.UserId;
 
         _context.CustomExercises.Update(exerciseToUpdate);
         await _context.SaveChangesAsync();

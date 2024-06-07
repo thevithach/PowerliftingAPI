@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PowerliftingAPI.Dto;
 
-public class ExerciseUpdateDTO
+public class CustomExerciseUpdateDTO
 {
     [Key]
     public int Id { get; set; }
