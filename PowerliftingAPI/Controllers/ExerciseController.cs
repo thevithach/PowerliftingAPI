@@ -143,4 +143,31 @@ public class ExerciseController : ControllerBase
         return Ok(_response);
 
     }
+
+    [HttpDelete]
+    public async Task<ActionResult<ApiResponse>> DeleteExerciseById(int id)
+    {
+        if (id == 0)
+        {
+            _response.StatusCode = HttpStatusCode.NotFound;
+            _response.IsSuccess = false;
+            _response.ErrorsMessages = new List<string>() { "No associated object to Id 0" };
+        }
+
+        var exerciseToBeDeleted = await _context.Exercises.FirstOrDefaultAsync(u => u.Id == id);
+
+        if (exerciseToBeDeleted == null)
+        {
+            _response.StatusCode = HttpStatusCode.BadRequest;
+            _response.ErrorsMessages = new List<string>() { "Object is null" };
+            return BadRequest(_response);
+        }
+
+        _context.Exercises.Remove(exerciseToBeDeleted);
+        await _context.SaveChangesAsync();
+
+        _response.IsSuccess = true;
+        _response.StatusCode = HttpStatusCode.NoContent;
+        return Ok(_response);
+    }
 }
