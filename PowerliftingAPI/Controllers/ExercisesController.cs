@@ -123,6 +123,43 @@ public class ExercisesController : ControllerBase
         _response.StatusCode = HttpStatusCode.NoContent;
         return Ok(_response);
     }
+
+    [HttpDelete]
+    public async Task<ActionResult<ApiResponse>> DeleteExerciseById(int id)
+    {
+        if (id == 0)
+        {
+            _response.StatusCode = HttpStatusCode.BadRequest;
+            _response.IsSuccess = false;
+            _response.ErrorsMessages = new List<string>() { "No object found at id 0" };
+            return BadRequest(_response);
+        }
+
+        var exerciseDoesExist = await _context.Exercises.AnyAsync(u => u.Id == id);
+        if (!exerciseDoesExist)
+        {
+            _response.StatusCode = HttpStatusCode.NotFound;
+            _response.IsSuccess = false;
+            _response.ErrorsMessages = new List<string>() { "Exercise was not found" };
+            return NotFound(_response);
+        }
+        
+        var exerciseToBeDeleted = await _context.Exercises.FirstOrDefaultAsync(u => u.Id == id);
+        
+        if (exerciseToBeDeleted == null)
+        {
+            _response.StatusCode = HttpStatusCode.BadRequest;
+            _response.IsSuccess = false;
+            _response.ErrorsMessages = new List<string>() { "Record is empty" };
+            return BadRequest();
+        }
+        
+        _context.Exercises.Remove(exerciseToBeDeleted);
+        await _context.SaveChangesAsync();
+
+        _response.StatusCode = HttpStatusCode.NoContent;
+        return Ok(_response);
+    }
     
     
     
