@@ -24,6 +24,5 @@ public class WorkoutExercises
     public int Repetitions { get; set; }
     [Required]
     public decimal Weight { get; set; }
-
 }
 
