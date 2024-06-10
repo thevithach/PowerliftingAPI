@@ -56,9 +56,16 @@ public class ExerciseController : ControllerBase
             return BadRequest(_response);
         }
 
-        var exerciseFromDb = await _context.Exercises.Select(e => new{ e.Id, e.Name, e.Description}).FirstOrDefaultAsync(u => u.Id == id);
+        var exerciseFromDb = await _context.Exercises
+            .Select(e => new
+            {
+                e.Id,
+                e.Name, 
+                e.Description
+            }).FirstOrDefaultAsync(u => u.Id == id);
+        
         if (exerciseFromDb == null)
-        {
+        { 
             _response.StatusCode = HttpStatusCode.BadRequest;
             _response.IsSuccess = false;
             return BadRequest(_response);
