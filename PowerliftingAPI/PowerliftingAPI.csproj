@@ -22,7 +22,6 @@
 
     <ItemGroup>
       <Folder Include="Repositories\" />
-      <Folder Include="Utility\" />
     </ItemGroup>
 
 </Project>
