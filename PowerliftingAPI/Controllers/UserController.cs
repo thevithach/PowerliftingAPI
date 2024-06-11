@@ -26,7 +26,34 @@ public class UserController : ControllerBase
         _userManager = userManager;
     }
 
-   
+    [HttpGet]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var users = await _userManager.Users.Select(e => new
+            {
+                e.Id,
+                e.UserName,
+                e.FirstName,
+                e.LastName,
+                e.PhoneNumber,
+                e.Address,
+                e.City,
+            }).
+            ToListAsync();
+        if (users.Count == 0)
+        {
+            _response.StatusCode = HttpStatusCode.BadRequest;
+            _response.ErrorsMessages = new List<string>() { "No users found" };
+            return BadRequest(_response);
+        }
+
+        _response.Result = users;
+        _response.IsSuccess = true;
+        _response.StatusCode = HttpStatusCode.OK;
+        return Ok(_response);
+    }
+
+    
     [HttpPost("Register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequestDTO registerRequestDto)
     {
