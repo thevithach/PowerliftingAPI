@@ -11,7 +11,7 @@ public class ApplicationUser : IdentityUser
     public string Address { get; set; }
     public string City { get; set; }
     [ValidateNever]
-    public virtual ICollection<Workouts> Workouts { get; set; }
+    public virtual ICollection<Workouts>? Workouts { get; set; }
     [ValidateNever]
-    public virtual ICollection<CustomExercises> CustomExercises { get; set; }
+    public virtual ICollection<CustomExercises>? CustomExercises { get; set; }
 }
