@@ -11,9 +11,7 @@ public class CustomExerciseUpdateDTO
 
     [StringLength(500)]
     public string Description { get; set; }
-
-    [Required]
-    public bool IsCustom { get; set; }
+    
 
     public string? UserId { get; set; }
 }
