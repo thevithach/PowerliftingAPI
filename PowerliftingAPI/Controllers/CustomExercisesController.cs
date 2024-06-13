@@ -69,7 +69,6 @@ public class CustomExercisesController : ControllerBase
             UserId = customExerciseCreateDto.UserId,
         };
         
-        // Check if the user exists only if UserId is not null
         if (exerciseToCreate.UserId != null)
         {
             var userExists = await _context.Users.AnyAsync(u => u.Id == exerciseToCreate.UserId);

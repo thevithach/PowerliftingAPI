@@ -95,6 +95,38 @@ public class WorkoutsController : ControllerBase
 
         return Ok(_response);
     }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteWorkoutById(int id)
+    {
+
+        var workoutDoesExist = await _context.Workouts.AnyAsync(u => u.Id == id);
+        if (!workoutDoesExist)
+        {
+            _response.StatusCode = HttpStatusCode.NotFound;
+            _response.IsSuccess = false;
+            _response.ErrorsMessages = new List<string>() { "The workout does not exist" };
+            return NotFound(_response);
+        }
+        
+        var workoutFromDb = await _context.Workouts.FirstOrDefaultAsync(u => u.Id == id);
+
+        if (workoutFromDb == null)
+        {
+            _response.StatusCode = HttpStatusCode.BadRequest;
+            _response.IsSuccess = false;
+            _response.ErrorsMessages = new List<string>() { "The record is empty (workout)" };
+            return BadRequest(_response);
+        }
+
+        _context.Workouts.Remove(workoutFromDb);
+        await _context.SaveChangesAsync();
+
+        _response.IsSuccess = true;
+        _response.StatusCode = HttpStatusCode.NoContent;
+        return Ok(_response);
+
+    }
     
     
 }
