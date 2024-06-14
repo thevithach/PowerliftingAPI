@@ -12,11 +12,11 @@ public class WorkoutExercises
     public int WorkoutId { get; set; }
     public virtual Workouts Workout { get; set; }
 
-    [ForeignKey("ExerciseId")]
-    public int? ExerciseId { get; set; }
+    [ForeignKey("ExercisesId")]
+    public int? ExercisesId { get; set; }
     public virtual Exercises Exercises { get; set; }
-    [ForeignKey("CustomExerciseId")]
-    public int? CustomExerciseId { get; set; }
+    [ForeignKey("CustomExercisesId")]
+    public int? CustomExercisesId { get; set; }
     public CustomExercises CustomExercises { get; set; }
     
     [Required]
