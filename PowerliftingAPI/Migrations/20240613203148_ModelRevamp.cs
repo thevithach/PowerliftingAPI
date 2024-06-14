@@ -5,7 +5,7 @@
 namespace PowerliftingAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class ModelRevampRemovedExerciseLog : Migration
+    public partial class ModelRevamp : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,8 +14,16 @@ namespace PowerliftingAPI.Migrations
                 name: "FK_WorkoutExercises_CustomExercises_ExerciseId",
                 table: "WorkoutExercises");
 
+            migrationBuilder.DropForeignKey(
+                name: "FK_WorkoutExercises_Workouts_WorkoutId",
+                table: "WorkoutExercises");
+
             migrationBuilder.DropTable(
                 name: "ExerciseLogs");
+
+            migrationBuilder.DropPrimaryKey(
+                name: "PK_WorkoutExercises",
+                table: "WorkoutExercises");
 
             migrationBuilder.DropIndex(
                 name: "IX_WorkoutExercises_ExerciseId",
@@ -25,6 +33,20 @@ namespace PowerliftingAPI.Migrations
                 name: "IsCustom",
                 table: "CustomExercises");
 
+            migrationBuilder.RenameTable(
+                name: "WorkoutExercises",
+                newName: "ExercisesInWorkout");
+
+            migrationBuilder.RenameColumn(
+                name: "ExerciseId",
+                table: "ExercisesInWorkout",
+                newName: "Repetitions");
+
+            migrationBuilder.RenameIndex(
+                name: "IX_WorkoutExercises_WorkoutId",
+                table: "ExercisesInWorkout",
+                newName: "IX_ExercisesInWorkout_WorkoutId");
+
             migrationBuilder.AddColumn<string>(
                 name: "Title",
                 table: "Workouts",
@@ -33,47 +55,29 @@ namespace PowerliftingAPI.Migrations
                 nullable: false,
                 defaultValue: "");
 
-            migrationBuilder.AlterColumn<int>(
-                name: "ExerciseId",
-                table: "WorkoutExercises",
-                type: "int",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "int");
-
             migrationBuilder.AddColumn<int>(
-                name: "CustomExerciseId",
-                table: "WorkoutExercises",
+                name: "CustomExercisesId",
+                table: "ExercisesInWorkout",
                 type: "int",
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(
-                name: "CustomExercisesId",
-                table: "WorkoutExercises",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
-
-            migrationBuilder.AddColumn<int>(
                 name: "ExercisesId",
-                table: "WorkoutExercises",
+                table: "ExercisesInWorkout",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
-
-            migrationBuilder.AddColumn<int>(
-                name: "Repetitions",
-                table: "WorkoutExercises",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
 
             migrationBuilder.AddColumn<decimal>(
                 name: "Weight",
-                table: "WorkoutExercises",
+                table: "ExercisesInWorkout",
                 type: "decimal(18,2)",
                 nullable: false,
                 defaultValue: 0m);
+
+            migrationBuilder.AddPrimaryKey(
+                name: "PK_ExercisesInWorkout",
+                table: "ExercisesInWorkout",
+                column: "Id");
 
             migrationBuilder.CreateTable(
                 name: "Exercises",
@@ -90,28 +94,34 @@ namespace PowerliftingAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkoutExercises_CustomExercisesId",
-                table: "WorkoutExercises",
+                name: "IX_ExercisesInWorkout_CustomExercisesId",
+                table: "ExercisesInWorkout",
                 column: "CustomExercisesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkoutExercises_ExercisesId",
-                table: "WorkoutExercises",
+                name: "IX_ExercisesInWorkout_ExercisesId",
+                table: "ExercisesInWorkout",
                 column: "ExercisesId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_WorkoutExercises_CustomExercises_CustomExercisesId",
-                table: "WorkoutExercises",
+                name: "FK_ExercisesInWorkout_CustomExercises_CustomExercisesId",
+                table: "ExercisesInWorkout",
                 column: "CustomExercisesId",
                 principalTable: "CustomExercises",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_WorkoutExercises_Exercises_ExercisesId",
-                table: "WorkoutExercises",
+                name: "FK_ExercisesInWorkout_Exercises_ExercisesId",
+                table: "ExercisesInWorkout",
                 column: "ExercisesId",
                 principalTable: "Exercises",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ExercisesInWorkout_Workouts_WorkoutId",
+                table: "ExercisesInWorkout",
+                column: "WorkoutId",
+                principalTable: "Workouts",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -120,57 +130,61 @@ namespace PowerliftingAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_WorkoutExercises_CustomExercises_CustomExercisesId",
-                table: "WorkoutExercises");
+                name: "FK_ExercisesInWorkout_CustomExercises_CustomExercisesId",
+                table: "ExercisesInWorkout");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_WorkoutExercises_Exercises_ExercisesId",
-                table: "WorkoutExercises");
+                name: "FK_ExercisesInWorkout_Exercises_ExercisesId",
+                table: "ExercisesInWorkout");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_ExercisesInWorkout_Workouts_WorkoutId",
+                table: "ExercisesInWorkout");
 
             migrationBuilder.DropTable(
                 name: "Exercises");
 
-            migrationBuilder.DropIndex(
-                name: "IX_WorkoutExercises_CustomExercisesId",
-                table: "WorkoutExercises");
+            migrationBuilder.DropPrimaryKey(
+                name: "PK_ExercisesInWorkout",
+                table: "ExercisesInWorkout");
 
             migrationBuilder.DropIndex(
-                name: "IX_WorkoutExercises_ExercisesId",
-                table: "WorkoutExercises");
+                name: "IX_ExercisesInWorkout_CustomExercisesId",
+                table: "ExercisesInWorkout");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ExercisesInWorkout_ExercisesId",
+                table: "ExercisesInWorkout");
 
             migrationBuilder.DropColumn(
                 name: "Title",
                 table: "Workouts");
 
             migrationBuilder.DropColumn(
-                name: "CustomExerciseId",
-                table: "WorkoutExercises");
-
-            migrationBuilder.DropColumn(
                 name: "CustomExercisesId",
-                table: "WorkoutExercises");
+                table: "ExercisesInWorkout");
 
             migrationBuilder.DropColumn(
                 name: "ExercisesId",
-                table: "WorkoutExercises");
-
-            migrationBuilder.DropColumn(
-                name: "Repetitions",
-                table: "WorkoutExercises");
+                table: "ExercisesInWorkout");
 
             migrationBuilder.DropColumn(
                 name: "Weight",
-                table: "WorkoutExercises");
+                table: "ExercisesInWorkout");
 
-            migrationBuilder.AlterColumn<int>(
-                name: "ExerciseId",
+            migrationBuilder.RenameTable(
+                name: "ExercisesInWorkout",
+                newName: "WorkoutExercises");
+
+            migrationBuilder.RenameColumn(
+                name: "Repetitions",
                 table: "WorkoutExercises",
-                type: "int",
-                nullable: false,
-                defaultValue: 0,
-                oldClrType: typeof(int),
-                oldType: "int",
-                oldNullable: true);
+                newName: "ExerciseId");
+
+            migrationBuilder.RenameIndex(
+                name: "IX_ExercisesInWorkout_WorkoutId",
+                table: "WorkoutExercises",
+                newName: "IX_WorkoutExercises_WorkoutId");
 
             migrationBuilder.AddColumn<bool>(
                 name: "IsCustom",
@@ -178,6 +192,11 @@ namespace PowerliftingAPI.Migrations
                 type: "bit",
                 nullable: false,
                 defaultValue: false);
+
+            migrationBuilder.AddPrimaryKey(
+                name: "PK_WorkoutExercises",
+                table: "WorkoutExercises",
+                column: "Id");
 
             migrationBuilder.CreateTable(
                 name: "ExerciseLogs",
@@ -237,6 +256,14 @@ namespace PowerliftingAPI.Migrations
                 table: "WorkoutExercises",
                 column: "ExerciseId",
                 principalTable: "CustomExercises",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_WorkoutExercises_Workouts_WorkoutId",
+                table: "WorkoutExercises",
+                column: "WorkoutId",
+                principalTable: "Workouts",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }

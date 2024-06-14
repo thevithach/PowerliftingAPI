@@ -12,8 +12,8 @@ using PowerliftingAPI.Data;
 namespace PowerliftingAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240607110301_ModelRevampRemovedExerciseLog")]
-    partial class ModelRevampRemovedExerciseLog
+    [Migration("20240613203148_ModelRevamp")]
+    partial class ModelRevamp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -315,16 +315,10 @@ namespace PowerliftingAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CustomExerciseId")
+                    b.Property<int?>("CustomExercisesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CustomExercisesId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ExerciseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExercisesId")
+                    b.Property<int?>("ExercisesId")
                         .HasColumnType("int");
 
                     b.Property<int>("Repetitions")
@@ -344,7 +338,7 @@ namespace PowerliftingAPI.Migrations
 
                     b.HasIndex("WorkoutId");
 
-                    b.ToTable("WorkoutExercises");
+                    b.ToTable("ExercisesInWorkout");
                 });
 
             modelBuilder.Entity("PowerliftingAPI.Models.Workouts", b =>
@@ -443,15 +437,11 @@ namespace PowerliftingAPI.Migrations
                 {
                     b.HasOne("PowerliftingAPI.Models.CustomExercises", "CustomExercises")
                         .WithMany()
-                        .HasForeignKey("CustomExercisesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomExercisesId");
 
                     b.HasOne("PowerliftingAPI.Models.Exercises", "Exercises")
                         .WithMany("WorkoutExercises")
-                        .HasForeignKey("ExercisesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ExercisesId");
 
                     b.HasOne("PowerliftingAPI.Models.Workouts", "Workout")
                         .WithMany("WorkoutExercises")
