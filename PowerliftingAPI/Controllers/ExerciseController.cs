@@ -45,7 +45,7 @@ public class ExerciseController : ControllerBase
         return Ok(_response);
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id:int}", Name = "GetExerciseById")]
     public async Task<IActionResult> GetExerciseById(int id)
     {
         if (id == 0)
@@ -151,7 +151,7 @@ public class ExerciseController : ControllerBase
 
     }
 
-    [HttpDelete]
+    [HttpDelete("{id:int}")]
     public async Task<ActionResult<ApiResponse>> DeleteExerciseById(int id)
     {
         if (id == 0)
