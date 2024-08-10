@@ -85,6 +85,7 @@ public class ExerciseController : ControllerBase
             _response.StatusCode = HttpStatusCode.BadRequest;
             _response.IsSuccess = false;
             _response.ErrorsMessages = new List<string>() { "Model is not valid" };
+            return BadRequest(_response);
         }
 
         Exercises exercises = new Exercises()
