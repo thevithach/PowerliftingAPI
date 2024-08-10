@@ -15,4 +15,6 @@ public class WorkoutCreateDTO
     public string Notes { get; set; }
     [Required]
     public string UserId { get; set; }
+    public bool isActive { get; set; }
+
 }
