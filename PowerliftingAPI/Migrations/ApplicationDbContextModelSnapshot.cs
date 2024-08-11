@@ -304,6 +304,33 @@ namespace PowerliftingAPI.Migrations
                     b.ToTable("Exercises");
                 });
 
+            modelBuilder.Entity("PowerliftingAPI.Models.Sets", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Repetitions")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SetNumber")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Weight")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("WorkoutExerciseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkoutExerciseId");
+
+                    b.ToTable("Sets");
+                });
+
             modelBuilder.Entity("PowerliftingAPI.Models.WorkoutExercises", b =>
                 {
                     b.Property<int>("Id")
@@ -317,12 +344,6 @@ namespace PowerliftingAPI.Migrations
 
                     b.Property<int?>("ExercisesId")
                         .HasColumnType("int");
-
-                    b.Property<int>("Repetitions")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("WorkoutId")
                         .HasColumnType("int");
@@ -362,6 +383,9 @@ namespace PowerliftingAPI.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -430,6 +454,17 @@ namespace PowerliftingAPI.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PowerliftingAPI.Models.Sets", b =>
+                {
+                    b.HasOne("PowerliftingAPI.Models.WorkoutExercises", "WorkoutExercise")
+                        .WithMany("Sets")
+                        .HasForeignKey("WorkoutExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WorkoutExercise");
+                });
+
             modelBuilder.Entity("PowerliftingAPI.Models.WorkoutExercises", b =>
                 {
                     b.HasOne("PowerliftingAPI.Models.CustomExercises", "CustomExercises")
@@ -474,6 +509,11 @@ namespace PowerliftingAPI.Migrations
             modelBuilder.Entity("PowerliftingAPI.Models.Exercises", b =>
                 {
                     b.Navigation("WorkoutExercises");
+                });
+
+            modelBuilder.Entity("PowerliftingAPI.Models.WorkoutExercises", b =>
+                {
+                    b.Navigation("Sets");
                 });
 
             modelBuilder.Entity("PowerliftingAPI.Models.Workouts", b =>

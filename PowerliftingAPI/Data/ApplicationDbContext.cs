@@ -17,6 +17,7 @@ namespace PowerliftingAPI.Data
         public DbSet<Exercises> Exercises { get; set; }
         public DbSet<CustomExercises> CustomExercises { get; set; }
         public DbSet<WorkoutExercises> ExercisesInWorkout { get; set; }
+        public DbSet<Sets> Sets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
