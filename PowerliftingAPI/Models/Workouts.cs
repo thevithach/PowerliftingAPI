@@ -20,6 +20,8 @@ public class Workouts
     [ForeignKey("User")]
     public string UserId { get; set; }
     public virtual ApplicationUser User { get; set; }
-
+    
     public virtual ICollection<WorkoutExercises> WorkoutExercises { get; set; }
+    
+    public bool isActive { get; set; }
 }
