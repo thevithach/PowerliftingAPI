@@ -26,6 +26,28 @@ public class WorkoutExerciseController : ControllerBase
         _response.StatusCode = HttpStatusCode.OK;
         return Ok(_response);
     }
+    
+    [HttpGet("{workoutId}")]
+    public async Task<ActionResult<ApiResponse>> GetExercisesByWorkoutId(int workoutId)
+    {
+        var exercises = await _context.ExercisesInWorkout
+            .Where(e => e.WorkoutId == workoutId)
+            .ToListAsync();
+
+        if (exercises == null || !exercises.Any())
+        {
+            _response.StatusCode = HttpStatusCode.NotFound;
+            _response.IsSuccess = false;
+            _response.ErrorsMessages = new List<string> { "No exercises found for this workout" };
+            return NotFound(_response);
+        }
+
+        _response.StatusCode = HttpStatusCode.OK;
+        _response.IsSuccess = true;
+        _response.Result = exercises;
+
+        return Ok(_response);
+    }
 
     [HttpPost]
     public async Task<ActionResult<ApiResponse>> AddExerciseToWorkout(WorkoutExerciseAddDTO workoutExerciseAddDto)
@@ -35,6 +57,15 @@ public class WorkoutExerciseController : ControllerBase
             _response.StatusCode = HttpStatusCode.BadRequest;
             _response.IsSuccess = false;
             _response.ErrorsMessages = ["Model is not valid"];
+            return BadRequest(_response);
+        }
+        
+        if (workoutExerciseAddDto.ExercisesId is null or 0 &&
+            workoutExerciseAddDto.CustomExerciseId is null or 0)
+        {
+            _response.StatusCode = HttpStatusCode.BadRequest;
+            _response.IsSuccess = false;
+            _response.ErrorsMessages = new List<string> { "Both ExercisesId and CustomExercisesId cannot be null or zero." };
             return BadRequest(_response);
         }
         
@@ -55,9 +86,13 @@ public class WorkoutExerciseController : ControllerBase
         {
             WorkoutId = workoutExerciseAddDto.WorkoutId,
             CustomExercisesId = workoutExerciseAddDto.CustomExerciseId,
-            ExercisesId = workoutExerciseAddDto.ExerciseId,
-            Weight = workoutExerciseAddDto.Weight,
-            Repetitions = workoutExerciseAddDto.Repetitions
+            ExercisesId = workoutExerciseAddDto.ExercisesId,
+            Sets = workoutExerciseAddDto.Sets.Select((set, index) => new Sets
+            {
+                SetNumber = index + 1,
+                Repetitions = set.Repetitions,
+                Weight = set.Weight
+            }).ToList()
         };
 
         await _context.ExercisesInWorkout.AddAsync(workoutExercises);
@@ -68,4 +103,6 @@ public class WorkoutExerciseController : ControllerBase
         _response.Result = workoutExerciseAddDto;
         return Ok(_response);
     }
+    
+    
 }
