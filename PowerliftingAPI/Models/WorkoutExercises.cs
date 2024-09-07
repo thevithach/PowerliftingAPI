@@ -1,3 +1,4 @@
+
 namespace PowerliftingAPI.Models;
 
 using System.ComponentModel.DataAnnotations;
@@ -17,12 +18,9 @@ public class WorkoutExercises
     public virtual Exercises Exercises { get; set; }
     [ForeignKey("CustomExercisesId")]
     public int? CustomExercisesId { get; set; }
-    public CustomExercises CustomExercises { get; set; }
+    public virtual CustomExercises CustomExercises { get; set; }
     
-    [Required]
-    [Range(1, int.MaxValue)]
-    public int Repetitions { get; set; }
-    [Required]
-    public decimal Weight { get; set; }
+    public virtual ICollection<Sets> Sets { get; set; }
+
 }
 

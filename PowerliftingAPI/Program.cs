@@ -1,5 +1,5 @@
 using System.Text;
-
+using System.Text.Json.Serialization;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +9,7 @@ using Microsoft.OpenApi.Models;
 
 using PowerliftingAPI.Data;
 using PowerliftingAPI.Models;
-
+using PowerliftingAPI.Repositories;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +17,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
+
+
+
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
