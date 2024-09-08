@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerliftingAPI", "PowerliftingAPI\PowerliftingAPI.csproj", "{E9F82DC0-0DDA-4108-AC4E-683153D3147B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerliftingAPITests", "PowerliftingAPITests\PowerliftingAPITests.csproj", "{BC6F4162-3FEC-4D58-B700-3977E7C44C6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{E9F82DC0-0DDA-4108-AC4E-683153D3147B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9F82DC0-0DDA-4108-AC4E-683153D3147B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9F82DC0-0DDA-4108-AC4E-683153D3147B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC6F4162-3FEC-4D58-B700-3977E7C44C6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC6F4162-3FEC-4D58-B700-3977E7C44C6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC6F4162-3FEC-4D58-B700-3977E7C44C6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC6F4162-3FEC-4D58-B700-3977E7C44C6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

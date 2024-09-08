@@ -162,3 +162,5 @@
 /Users/thevithach/Projects/PowerliftingAPI/PowerliftingAPI/obj/Debug/net8.0/PowerliftingAPI.pdb
 /Users/thevithach/Projects/PowerliftingAPI/PowerliftingAPI/obj/Debug/net8.0/PowerliftingAPI.genruntimeconfig.cache
 /Users/thevithach/Projects/PowerliftingAPI/PowerliftingAPI/obj/Debug/net8.0/ref/PowerliftingAPI.dll
+/Users/thevithach/Projects/PowerliftingAPI/PowerliftingAPI/bin/Debug/net8.0/Azure.Extensions.AspNetCore.Configuration.Secrets.dll
+/Users/thevithach/Projects/PowerliftingAPI/PowerliftingAPI/bin/Debug/net8.0/Azure.Security.KeyVault.Secrets.dll

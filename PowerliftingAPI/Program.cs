@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using Azure.Identity;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -14,9 +15,14 @@ using PowerliftingAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var keyVaultUrl = new Uri(builder.Configuration.GetSection("KeyVaultURL").Value!);
+var azureCredential = new DefaultAzureCredential();
+builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
+
 // Add services to the container.
+var cs = builder.Configuration.GetSection("azuresql").Value;
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(cs));
 
 builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
 
@@ -28,13 +34,15 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = false;
-    options.Password.RequiredLength = 1; // Change later..
+    options.Password.RequiredLength = 1; // Change later
     options.Password.RequireLowercase = false;
     options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
 });
+var jwtKey = builder.Configuration.GetSection("jwtKeyValue").Value!;
 
-var key = builder.Configuration.GetValue<string>("JWT:Secret");
+
+// var key = builder.Configuration.GetValue<string>("JWT:Secret");
 builder.Services.AddAuthentication(u =>
 {
     u.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -46,7 +54,7 @@ builder.Services.AddAuthentication(u =>
     u.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey)),
         ValidateIssuer = false,
         ValidateAudience = false
     };

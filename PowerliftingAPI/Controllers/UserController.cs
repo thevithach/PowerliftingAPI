@@ -25,7 +25,7 @@ public class UserController : ControllerBase
     {
         _context = context;
         _response = new ApiResponse();
-        _secretKey = configuration.GetValue<string>("JWT:Secret");
+        _secretKey = configuration.GetSection("jwtKeyValue").Value!;
         _roleManager = roleManager;
         _userManager = userManager;
     }

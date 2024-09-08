@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "1USiKzTeLneFdG5nADrD+rWM8xSzcfIJtjs00opxWBBzOWqbeQVjFTKbirHl1QUrs7FJZeOgGN7C0mjDgOEjjQ==",
+  "dgSpecHash": "RfRZ+wDeqiZTE5Yr20Oiiy00v6U39tsL9zWI/2tsPGSJH04UkvubVNNHV2q7NL5Opau0RdqPEYv3Wwgtg3o5Yw==",
   "success": true,
   "projectFilePath": "/Users/thevithach/Projects/PowerliftingAPI/PowerliftingAPI/PowerliftingAPI.csproj",
   "expectedPackageFiles": [
-    "/Users/thevithach/.nuget/packages/azure.core/1.39.0/azure.core.1.39.0.nupkg.sha512",
+    "/Users/thevithach/.nuget/packages/azure.core/1.42.0/azure.core.1.42.0.nupkg.sha512",
+    "/Users/thevithach/.nuget/packages/azure.extensions.aspnetcore.configuration.secrets/1.3.2/azure.extensions.aspnetcore.configuration.secrets.1.3.2.nupkg.sha512",
     "/Users/thevithach/.nuget/packages/azure.identity/1.10.3/azure.identity.1.10.3.nupkg.sha512",
+    "/Users/thevithach/.nuget/packages/azure.security.keyvault.secrets/4.6.0/azure.security.keyvault.secrets.4.6.0.nupkg.sha512",
     "/Users/thevithach/.nuget/packages/azure.storage.blobs/12.20.0/azure.storage.blobs.12.20.0.nupkg.sha512",
     "/Users/thevithach/.nuget/packages/azure.storage.common/12.19.0/azure.storage.common.12.19.0.nupkg.sha512",
     "/Users/thevithach/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
@@ -35,6 +37,7 @@
     "/Users/thevithach/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "/Users/thevithach/.nuget/packages/microsoft.extensions.caching.abstractions/8.0.0/microsoft.extensions.caching.abstractions.8.0.0.nupkg.sha512",
     "/Users/thevithach/.nuget/packages/microsoft.extensions.caching.memory/8.0.0/microsoft.extensions.caching.memory.8.0.0.nupkg.sha512",
+    "/Users/thevithach/.nuget/packages/microsoft.extensions.configuration/2.1.0/microsoft.extensions.configuration.2.1.0.nupkg.sha512",
     "/Users/thevithach/.nuget/packages/microsoft.extensions.configuration.abstractions/8.0.0/microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",
     "/Users/thevithach/.nuget/packages/microsoft.extensions.dependencyinjection/8.0.0/microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512",
     "/Users/thevithach/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/8.0.0/microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",

@@ -15,7 +15,6 @@
 /copilot/chatSessions
 # Ignore all DLL files
 *.dll
-
 # Ignore obj and bin directories
 **/obj/
 **/bin/
