@@ -1,1 +1,24 @@
-/PowerliftingAPI/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.CSharp.resources.dll
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/contentModel.xml
+/.idea.PowerliftingAPI.iml
+/projectSettingsUpdater.xml
+/modules.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# GitHub Copilot persisted chat sessions
+/copilot/chatSessions
+# Ignore all DLL files
+*.dll
+**\*.dll
+# Ignore all PDB files
+*.pdb
+**\*.pdb
+# Ignore obj and bin directories
+**/obj/
+**/bin/
