@@ -13,6 +13,7 @@ namespace PowerliftingAPI.Data
         }
         
         public DbSet<ApplicationUser> Users { get; set; }
+        public DbSet<PersonalRecord> PersonalRecords { get; set; }
         public DbSet<Workouts> Workouts { get; set; }
         public DbSet<Exercises> Exercises { get; set; }
         public DbSet<CustomExercises> CustomExercises { get; set; }

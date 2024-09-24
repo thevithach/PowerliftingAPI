@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PowerliftingAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b7ae7a2ac4e1864be79d9816338193eadcd3b02d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4cd0da497a9dcf504253e5fdfa6223a43a6147d3")]
 [assembly: System.Reflection.AssemblyProductAttribute("PowerliftingAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PowerliftingAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

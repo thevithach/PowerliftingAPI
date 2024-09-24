@@ -98,6 +98,47 @@ public class WorkoutExerciseController : ControllerBase
         await _context.ExercisesInWorkout.AddAsync(workoutExercises);
         await _context.SaveChangesAsync();
 
+        // Calculate and update PRs
+        foreach (var set in workoutExercises.Sets)
+        {
+            var oneRepMax = set.Weight + (set.Weight * set.Repetitions * (decimal)0.0333);
+            if (workoutExerciseAddDto.ExercisesId.HasValue)
+            {
+                var personalRecord = await _context.PersonalRecords
+                    .Where(pr => pr.UserId == workoutExerciseAddDto.UserId && pr.ExerciseId == workoutExerciseAddDto.ExercisesId.Value)
+                    .FirstOrDefaultAsync();
+
+                if (personalRecord == null)
+                {
+                    // Create a new personal record
+                    personalRecord = new PersonalRecord
+                    {
+                        UserId = workoutExerciseAddDto.UserId,
+                        ExerciseId = workoutExerciseAddDto.ExercisesId.Value,
+                        OneRepMax = (double)oneRepMax, // Convert to double
+                        Date = DateTime.Now
+                    };
+                    _context.PersonalRecords.Add(personalRecord);
+                }
+                else if ((double)oneRepMax > personalRecord.OneRepMax)
+                {
+                    // Update the existing personal record
+                    personalRecord.OneRepMax = (double)oneRepMax;
+                    personalRecord.Date = DateTime.Now;
+                    _context.PersonalRecords.Update(personalRecord);
+                }
+            }
+            else
+            {
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.IsSuccess = false;
+                return BadRequest(_response);
+            }
+        }
+
+        await _context.SaveChangesAsync();
+
+
         _response.StatusCode = HttpStatusCode.OK;
         _response.IsSuccess = true;
         _response.Result = workoutExerciseAddDto;
