@@ -256,10 +256,11 @@ public class WorkoutsController : ControllerBase
 
     }
     
-    [HttpPut("endActive/{userId}")]
-    public async Task<ActionResult<ApiResponse>> EndActiveWorkout(string userId)
+    [HttpPut("endActive")]
+    public async Task<ActionResult<ApiResponse>> EndActiveWorkout([FromBody] EndActiveWorkoutDTO dto)
     {
-        var activeWorkout = await _context.Workouts.FirstOrDefaultAsync(w => w.UserId == userId && w.isActive);
+        var activeWorkout = await _context.Workouts
+            .FirstOrDefaultAsync(w => w.UserId == dto.UserId && w.isActive);
 
         if (activeWorkout == null)
         {
@@ -269,6 +270,8 @@ public class WorkoutsController : ControllerBase
             return NotFound(_response);
         }
 
+        // Update the title if provided, otherwise keep existing
+        activeWorkout.Title = string.IsNullOrWhiteSpace(dto.FinalTitle) ? activeWorkout.Title : dto.FinalTitle;
         activeWorkout.isActive = false;
         await _context.SaveChangesAsync();
 

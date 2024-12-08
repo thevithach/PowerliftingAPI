@@ -29,7 +29,7 @@ builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
 
 
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>(); 
 
 builder.Services.Configure<IdentityOptions>(options =>
 {

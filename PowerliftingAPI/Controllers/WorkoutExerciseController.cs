@@ -96,7 +96,6 @@ public class WorkoutExerciseController : ControllerBase
         };
 
         await _context.ExercisesInWorkout.AddAsync(workoutExercises);
-        await _context.SaveChangesAsync();
 
         // Calculate and update PRs
         foreach (var set in workoutExercises.Sets)

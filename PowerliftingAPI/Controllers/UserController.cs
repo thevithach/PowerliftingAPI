@@ -65,6 +65,41 @@ public class UserController : ControllerBase
         _response.StatusCode = HttpStatusCode.OK;
         return Ok(_response);
     }
+    
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUserDetails(string id)
+    {
+        var user = await _userManager.Users
+            .Include(u => u.CustomExercises)
+            .FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user == null)
+        {
+            _response.StatusCode = HttpStatusCode.NotFound;
+            _response.ErrorsMessages = new List<string>() { "User not found" };
+            return NotFound(_response);
+        }
+
+        var userDTO = new UserDTO
+        {
+            Id = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            PhoneNumber = user.PhoneNumber,
+            Address = user.Address,
+            City = user.City,
+            CustomExercises = user.CustomExercises.Select(ce => new CustomExerciseGetDTO()
+            {
+                Id = ce.Id,
+                Name = ce.Name,
+            }).ToList()
+        };
+
+        _response.Result = userDTO;
+        _response.IsSuccess = true;
+        _response.StatusCode = HttpStatusCode.OK;
+        return Ok(_response);
+    }
 
     
     [HttpPost("Register")]

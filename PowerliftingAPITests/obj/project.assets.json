@@ -9062,6 +9062,7 @@
       "packagesPath": "/Users/thevithach/.nuget/packages/",
       "outputPath": "/Users/thevithach/Projects/PowerliftingAPI/PowerliftingAPITests/obj/",
       "projectStyle": "PackageReference",
+      "UsingMicrosoftNETSdk": false,
       "configFilePaths": [
         "/Users/thevithach/.nuget/NuGet/NuGet.Config"
       ],

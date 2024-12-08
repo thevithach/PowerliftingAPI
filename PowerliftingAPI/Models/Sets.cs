@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace PowerliftingAPI.Models;
 
@@ -11,7 +12,7 @@ namespace PowerliftingAPI.Models;
         [Required]
         [ForeignKey("WorkoutExerciseId")]
         public int WorkoutExerciseId { get; set; }
-
+        
         public virtual WorkoutExercises WorkoutExercise { get; set; }
 
         [Required]
