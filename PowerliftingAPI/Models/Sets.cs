@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Newtonsoft.Json;
 
 namespace PowerliftingAPI.Models;
 
@@ -12,7 +13,7 @@ namespace PowerliftingAPI.Models;
         [Required]
         [ForeignKey("WorkoutExerciseId")]
         public int WorkoutExerciseId { get; set; }
-        
+        [JsonIgnore] // Prevent serialization of WorkoutExercise reference
         public virtual WorkoutExercises WorkoutExercise { get; set; }
 
         [Required]

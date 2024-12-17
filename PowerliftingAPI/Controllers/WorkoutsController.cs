@@ -96,10 +96,10 @@ public class WorkoutsController : ControllerBase
 
         if (activeWorkout == null)
         {
-            _response.StatusCode = HttpStatusCode.NotFound;
-            _response.IsSuccess = false;
-            _response.ErrorsMessages = new List<string> { "No active workout found for the user" };
-            return NotFound(_response);
+            _response.StatusCode = HttpStatusCode.OK;
+            _response.IsSuccess = true;
+            _response.Result = null;
+            return Ok(_response);
         }
 
         // Create a new WorkoutsDTO and map the properties
@@ -281,6 +281,38 @@ public class WorkoutsController : ControllerBase
 
         return Ok(_response);
     }
+    
+    
+    [HttpPut("saveWorkout")]
+    public async Task<ActionResult<ApiResponse>> SaveWorkout([FromBody] SaveWorkoutDTO dto)
+    {
+        var activeWorkout = await _context.Workouts
+            .FirstOrDefaultAsync(w => w.UserId == dto.UserId && w.isActive);
+
+        if (activeWorkout == null)
+        {
+            _response.StatusCode = HttpStatusCode.NotFound;
+            _response.IsSuccess = false;
+            _response.ErrorsMessages = new List<string> { "No active workout found for the user" };
+            return NotFound(_response);
+        }
+
+        // Update the title if provided
+        activeWorkout.Title = string.IsNullOrWhiteSpace(dto.Title) ? activeWorkout.Title : dto.Title;
+
+        // Any additional fields can be updated here
+        activeWorkout.Notes = dto.Notes;
+
+        await _context.SaveChangesAsync();
+
+        _response.StatusCode = HttpStatusCode.OK;
+        _response.IsSuccess = true;
+        _response.Result = activeWorkout;
+
+        return Ok(_response);
+    }
+
+    
     
     
 }
