@@ -1,0 +1,10 @@
+# Ignore all DLL files
+*.dll
+**\*.dll
+
+# Ignore PDB files
+*.pdb
+
+# Ignore other build output directories
+bin/
+obj/
