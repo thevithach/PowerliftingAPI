@@ -25,7 +25,7 @@ public class WorkoutsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllWorkouts()
     {
-        var workouts = await _workoutRepository.GetAllWorkouts();
+        var workouts = await _workoutRepository.GetAllWorkoutsAsync();
 
         if (!workouts.Any())
         {
@@ -52,7 +52,7 @@ public class WorkoutsController : ControllerBase
             return NotFound(_response);
         }
 
-        var workout = await _context.Workouts.FirstOrDefaultAsync(u => u.Id == id);
+        var workout = await _workoutRepository.GetWorkoutById(id);
 
         if (workout == null)
         {
@@ -89,10 +89,7 @@ public class WorkoutsController : ControllerBase
     [HttpGet("active/{userId}")]
     public async Task<ActionResult<ApiResponse>> GetActiveWorkout(string userId)
     {
-        var activeWorkout = await _context.Workouts
-            .Include(w => w.WorkoutExercises)
-            .ThenInclude(we => we.Sets)
-            .FirstOrDefaultAsync(w => w.UserId == userId && w.isActive);
+        var activeWorkout = await _workoutRepository.GetActiveWorkoutById(userId);
 
         if (activeWorkout == null)
         {
@@ -138,32 +135,7 @@ public class WorkoutsController : ControllerBase
     [HttpGet("{userId}")]
     public async Task<ActionResult<ApiResponse>> GetNonActiveWorkouts(string userId)
     {
-        var nonActiveWorkouts = await _context.Workouts
-            .Where(w => w.UserId == userId && !w.isActive)
-            .Select(w => new 
-            {
-                w.Id, 
-                w.Title, 
-                w.Date, 
-                w.Notes, 
-                w.UserId, 
-                WorkoutExercises = w.WorkoutExercises.Select(we => new 
-                {
-                    we.Id,
-                    we.WorkoutId,
-                    we.ExercisesId,
-                    we.CustomExercisesId,
-                    Sets = we.Sets.Select(s => new 
-                    {
-                        s.Id,
-                        s.WorkoutExerciseId,
-                        s.SetNumber,
-                        s.Repetitions,
-                        s.Weight
-                    }).ToList()
-                }).ToList()
-            })
-            .ToListAsync();
+        var nonActiveWorkouts = await _workoutRepository.GetNonActiveWorkouts(userId);
 
         if (nonActiveWorkouts == null || !nonActiveWorkouts.Any())
         {
@@ -194,7 +166,7 @@ public class WorkoutsController : ControllerBase
         // Check if there's an active workout only if the new workout is meant to be active
         if (workoutCreateDto.isActive)
         {
-            var activeWorkout = await _context.Workouts.AnyAsync(u => u.UserId == workoutCreateDto.UserId && u.isActive);
+            var activeWorkout = await _workoutRepository.HasActiveWorkout(workoutCreateDto.UserId);
             if (activeWorkout)
             {
                 _response.ErrorsMessages = new List<string> { "A workout is already active, finish your current one before creating a new active workout" };
@@ -204,51 +176,39 @@ public class WorkoutsController : ControllerBase
             }
         }
 
-        Workouts workout = new Workouts()
-        {
-            Title = workoutCreateDto.Title,
-            Date = workoutCreateDto.Date,
-            Notes = workoutCreateDto.Notes,
-            UserId = workoutCreateDto.UserId,
-            isActive = workoutCreateDto.isActive
-        };
-
-        _context.Workouts.Add(workout);
-        await _context.SaveChangesAsync();
+        await _workoutRepository.CreateWorkout(workoutCreateDto);
 
         _response.StatusCode = HttpStatusCode.Created;
         _response.IsSuccess = true;
         _response.Result = workoutCreateDto;
 
         return Ok(_response);
-
     }
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteWorkoutById(int id)
     {
 
-        var workoutDoesExist = await _context.Workouts.AnyAsync(u => u.Id == id);
+        var workoutDoesExist = await _workoutRepository.WorkoutExists(id);
         if (!workoutDoesExist)
         {
             _response.StatusCode = HttpStatusCode.NotFound;
             _response.IsSuccess = false;
-            _response.ErrorsMessages = new List<string>() { "The workout does not exist" };
+            _response.ErrorsMessages = ["The workout does not exist"];
             return NotFound(_response);
         }
-        
-        var workoutFromDb = await _context.Workouts.FirstOrDefaultAsync(u => u.Id == id);
+
+        var workoutFromDb = await _workoutRepository.GetWorkoutById(id);
 
         if (workoutFromDb == null)
         {
             _response.StatusCode = HttpStatusCode.BadRequest;
             _response.IsSuccess = false;
-            _response.ErrorsMessages = new List<string>() { "The record is empty (workout)" };
+            _response.ErrorsMessages = ["The record is empty (workout)"];
             return BadRequest(_response);
         }
 
-        _context.Workouts.Remove(workoutFromDb);
-        await _context.SaveChangesAsync();
+        await _workoutRepository.DeleteWorkoutById(id);
 
         _response.IsSuccess = true;
         _response.StatusCode = HttpStatusCode.NoContent;
@@ -259,21 +219,15 @@ public class WorkoutsController : ControllerBase
     [HttpPut("endActive")]
     public async Task<ActionResult<ApiResponse>> EndActiveWorkout([FromBody] EndActiveWorkoutDTO dto)
     {
-        var activeWorkout = await _context.Workouts
-            .FirstOrDefaultAsync(w => w.UserId == dto.UserId && w.isActive);
+        var activeWorkout = await _workoutRepository.EndActiveWorkout(dto);
 
         if (activeWorkout == null)
         {
             _response.StatusCode = HttpStatusCode.NotFound;
             _response.IsSuccess = false;
-            _response.ErrorsMessages = new List<string> { "No active workout found for the user" };
+            _response.ErrorsMessages = ["No active workout found for the user"];
             return NotFound(_response);
         }
-
-        // Update the title if provided, otherwise keep existing
-        activeWorkout.Title = string.IsNullOrWhiteSpace(dto.FinalTitle) ? activeWorkout.Title : dto.FinalTitle;
-        activeWorkout.isActive = false;
-        await _context.SaveChangesAsync();
 
         _response.StatusCode = HttpStatusCode.OK;
         _response.IsSuccess = true;
@@ -283,7 +237,7 @@ public class WorkoutsController : ControllerBase
     }
     
     
-    [HttpPut("saveWorkout")]
+    /*[HttpPut("saveWorkout")]
     public async Task<ActionResult<ApiResponse>> SaveWorkout([FromBody] SaveWorkoutDTO dto)
     {
         var activeWorkout = await _context.Workouts
@@ -311,6 +265,7 @@ public class WorkoutsController : ControllerBase
 
         return Ok(_response);
     }
+    */
 
     
     

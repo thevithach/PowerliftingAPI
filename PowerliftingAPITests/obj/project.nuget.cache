@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "oeVr/wRmNnY=",
+  "dgSpecHash": "1wW1nd/a0UI=",
   "success": true,
   "projectFilePath": "/Users/thevithach/Projects/PowerliftingAPI/PowerliftingAPITests/PowerliftingAPITests.csproj",
   "expectedPackageFiles": [
@@ -12,6 +12,7 @@
     "/Users/thevithach/.nuget/packages/azure.storage.common/12.19.0/azure.storage.common.12.19.0.nupkg.sha512",
     "/Users/thevithach/.nuget/packages/castle.core/5.1.1/castle.core.5.1.1.nupkg.sha512",
     "/Users/thevithach/.nuget/packages/coverlet.collector/6.0.0/coverlet.collector.6.0.0.nupkg.sha512",
+    "/Users/thevithach/.nuget/packages/fluentassertions/8.0.0-alpha.1/fluentassertions.8.0.0-alpha.1.nupkg.sha512",
     "/Users/thevithach/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/8.0.6/microsoft.aspnetcore.authentication.jwtbearer.8.0.6.nupkg.sha512",
     "/Users/thevithach/.nuget/packages/microsoft.aspnetcore.cryptography.internal/8.0.6/microsoft.aspnetcore.cryptography.internal.8.0.6.nupkg.sha512",
     "/Users/thevithach/.nuget/packages/microsoft.aspnetcore.cryptography.keyderivation/8.0.6/microsoft.aspnetcore.cryptography.keyderivation.8.0.6.nupkg.sha512",

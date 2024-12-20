@@ -1,5 +1,6 @@
-# Ignore DLL files
+# Ignore all DLL files
 *.dll
+**\*.dll
 
 # Ignore PDB files
 *.pdb
